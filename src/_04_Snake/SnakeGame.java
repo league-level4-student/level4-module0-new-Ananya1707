@@ -116,6 +116,27 @@ public class SnakeGame implements ActionListener, KeyListener {
 		 * 
 		 * Hint: KeyEvent.VK_UP.
 		 */
+		
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_UP :
+			snake.setDirection(Direction.UP);
+			break;
+			
+		case KeyEvent.VK_DOWN :
+			snake.setDirection(Direction.DOWN);
+			break;
+			
+		case KeyEvent.VK_LEFT :
+			snake.setDirection(Direction.LEFT);
+			break;
+			
+		case KeyEvent.VK_RIGHT :
+			snake.setDirection(Direction.RIGHT);
+			break;
+
+		default:
+			break;
+		}
 
 	}
 
@@ -125,7 +146,12 @@ public class SnakeGame implements ActionListener, KeyListener {
 		 * Create a new Location object that is set to a random x and y values between 0
 		 * and the WIDTH and HEIGHT variables respectively.
 		 */
-
+		
+		Location l = new Location();
+		Random r = new Random();
+		
+		l.setX(r.nextInt(WIDTH));
+		l.setY(r.nextInt(HEIGHT));
 
 		/*
 		 * Set the foodLocation equal to the Location object you just created.
@@ -133,16 +159,29 @@ public class SnakeGame implements ActionListener, KeyListener {
 		 * Hint: Use the snake's isLocationOnSnake method to make sure you don't put the
 		 * food on top of the snake.
 		 */
-
+		
+		if(snake.isLocationOnSnake(l) == false) {
+			foodLocation = l;
+		}
+		else {
+			randomizeFoodLocation();
+		}
+		
 	}
 
 	private void gameOver() {
 
 		// Stop the timer.
+		
+		timer.stop();
 
 		// Tell the user their snake is dead.
+		
+		JOptionPane.showMessageDialog(null, "Your snake is dead");
 
 		// Ask the user if they want to play again.
+		
+		String user = JOptionPane.showInputDialog("Would you like to play? type yes or no.");
 
 
 		/*
@@ -150,6 +189,13 @@ public class SnakeGame implements ActionListener, KeyListener {
 		 * this class's randomizeFoodLocation method then restart the timer. Otherwise,
 		 * exit the game.
 		 */
+		
+		if(user.equalsIgnoreCase("yes")) {
+			snake.resetLocation();
+			randomizeFoodLocation();
+			timer.restart();
+		}
+
 
 	}
 
@@ -157,18 +203,25 @@ public class SnakeGame implements ActionListener, KeyListener {
 	public void actionPerformed(ActionEvent e) {
 
 		// Call the snake's update method.
+		snake.update();
 
 		/*
 		 * If the snake's head is colliding with its own body or out of bounds call the
 		 * gameOver method.
 		 */
-
+		if(snake.isOutOfBounds() ==  true || snake.isHeadCollidingWithBody() == true) {
+			gameOver();
+		}
 
 		/*
 		 * If the location of the snake's head is equal to the location of the food,
 		 * feed the snake and randomize the food location.
 		 */
+		if(snake.getHeadLocation() == foodLocation) {
+			randomizeFoodLocation();
+		}
 
 		panel.repaint();
+		
 	}
 }

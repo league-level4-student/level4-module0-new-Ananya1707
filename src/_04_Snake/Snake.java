@@ -2,6 +2,7 @@ package _04_Snake;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -37,12 +38,35 @@ public class Snake {
 		 * Create variables for the next X and Y location of the snake's head.
 		 * Initialize them to the current X and Y locations.
 		 */
+		int nextX = head.getLocation().getX();
+		int nextY = head.getLocation().getY();
 
 		/*
 		 * Use a switch statement to check on the currentDirection of the snake and
 		 * calculate the head's next x and y position. Depending on the direction, the
 		 * variables you created may increase or decrease by 1.
 		 */
+		
+		switch (currentDirection) {
+		case UP :
+			nextY = nextY + 1;
+			break;
+			
+		case DOWN :
+			nextY = nextY - 1;
+			break;
+			
+		case LEFT :
+			nextX = nextX - 1;
+			break;
+			
+		case RIGHT :
+			nextX = nextX + 1;
+			break;
+
+		default:
+			break;
+		}
 
 		/*
 		 * Change the Location of each SnakeSegment in your snake ArrayList to the
@@ -56,8 +80,20 @@ public class Snake {
 		 * Create a new Location object and initialize it with the values calculated in
 		 * the first step. Then set the head's location equal to the new location.
 		 */
+		
+		for (int i = snake.size()-1; i < 0; i++) {
+			snake.get(i).setLocation(snake.get(i-1).getLocation());
+		}
+		
+		Location h = new Location();
+		h.setX(nextX);
+		h.setY(nextY);
+		
+		head.setLocation(h);
+		
 
 		// Set the canMove member variable to true.
+		canMove = true;
 
 	}
 
@@ -70,6 +106,12 @@ public class Snake {
 		 * 
 		 * Hint: Use the isNotOppositeDirection method.
 		 */
+		
+		if(isNotOppositeDirection(currentDirection) == true && canMove == true) {
+			currentDirection = direction;
+			canMove = false;
+			
+		}
 
 	}
 
@@ -82,6 +124,21 @@ public class Snake {
 		 * For example, if currentDirection is UP and the passed in direction is DOWN
 		 * this method should return false.
 		 */
+		
+		Direction oppositeDirection;
+		
+		if(currentDirection == Direction.UP) {
+			oppositeDirection = Direction.DOWN;
+		}
+		else if(currentDirection == Direction.DOWN) {
+			oppositeDirection = Direction.UP;
+		}
+		else if(currentDirection == Direction.LEFT) {
+			oppositeDirection = Direction.RIGHT;
+		}
+		else if(currentDirection == Direction.RIGHT) {
+			oppositeDirection = Direction.LEFT;
+		}
 
 		return true;
 	}
@@ -131,6 +188,7 @@ public class Snake {
 		 * Complete the method so it returns true if the passed in location is located
 		 * on the snake.
 		 */
+		
 
 		return false;
 	}
