@@ -147,11 +147,10 @@ public class SnakeGame implements ActionListener, KeyListener {
 		 * and the WIDTH and HEIGHT variables respectively.
 		 */
 		
-		Location l = new Location();
 		Random r = new Random();
+		Location l = new Location(r.nextInt(WIDTH),r.nextInt(HEIGHT));
 		
-		l.setX(r.nextInt(WIDTH));
-		l.setY(r.nextInt(HEIGHT));
+
 
 		/*
 		 * Set the foodLocation equal to the Location object you just created.
@@ -217,8 +216,9 @@ public class SnakeGame implements ActionListener, KeyListener {
 		 * If the location of the snake's head is equal to the location of the food,
 		 * feed the snake and randomize the food location.
 		 */
-		if(snake.getHeadLocation() == foodLocation) {
+		if(snake.getHeadLocation().equals(foodLocation)) {
 			randomizeFoodLocation();
+			snake.feed();
 		}
 
 		panel.repaint();
